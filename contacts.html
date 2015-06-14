@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <title>Genesis Gym | Contacts</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/reset.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/grid_12.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCCdgjsV4lAA2lOSdAt64k0rjfVdnq1YsQ"></script>
+</head>
+<body>
+    <div class="main">
+        <!--==============================header=================================-->
+        <header>
+            <h1><a href="index.html">Genesis <strong>Gym</strong></a></h1>
+            <nav>
+                <ul class="menu">
+                    <li><a href="error.html">Schedule</a></li>
+                    <li><a href="error.html">Equipment</a></li>
+                    <li><a href="error.html">Testimonials</a></li>
+                    <li class="current"><a href="contacts.html">Contacts</a></li>
+                    <li><a href="error.html">Registration</a></li>
+                </ul>
+            </nav>
+        </header>
+        <!--==============================content================================-->
+        <section id="content">
+            <div class="container_12">
+                <div class="grid_12">
+                    <div class="box-shadow">
+                        <div class="wrap block-2">
+                            <div class="col-4">
+                                <h2><span class="color-1">Find</span> us</h2>
+                                <div class="map img-border" id="googleMap"></div>
+                                <dl id="contactDetail"></dl>
+                            </div>
+                            <div class="col-3">
+                                <h2><span class="color-1">Contact</span> form</h2>
+                                <form id="form" method="post" action="#">
+                                    <fieldset>
+                                        <label>
+                                            <input type="text" value="Name" onBlur="if(this.value=='') this.value='Name'" onFocus="if(this.value =='Name' ) this.value=''">
+                                        </label>
+                                        <label>
+                                            <input type="text" value="Email" onBlur="if(this.value=='') this.value='Email'" onFocus="if(this.value =='Email' ) this.value=''">
+                                        </label>
+                                        <label>
+                                            <textarea onBlur="if(this.value==''){this.value='Message'}" onFocus="if(this.value=='Message'){this.value=''}">Message</textarea>
+                                        </label>
+                                        <div class="btns"><a href="#" class="button">Clear</a><a href="#" class="button">Send</a></div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--==============================footer=================================-->
+        <footer>
+            <p>© 2015 Genesis Gym</p>
+            <p>Website Template by <a target="_blank" href="http://www.templatemonster.com/" class="link">TemplateMonster.com</a></p>
+        </footer>
+    </div>
+<script>
+    $('document').ready(function () {
+        
+        $.ajax({
+            method: "POST",
+            dataType: "JSON",
+            url: "http://genesisgym.altervista.org/php/getContacts.php",
+            data: {name: "Zumba", what: "relation"},
+            success: function (response) {
+                var address = '';
+                var data = '';
+                var lat = '';
+                var long = '';
+                for (var i=0; i<response.length; i++) {
+                    if(response[i].contactType == 'Address') {
+                        address += '<dt class="color-1"><strong>' + response[i].data + '</strong></dt>';
+                    } else if(response[i].contactType == 'latitude') {
+                        lat = response[i].data;
+                    } else if(response[i].contactType == 'longitude') {
+                        long = response[i].data;
+                    } else {
+                        data += '<dd><span><b>' + response[i].contactType + '</b></span>' + response[i].data + '</dd>';
+                    }
+                }
+                address += data;
+                $('#contactDetail').append(address);
+                initialize(lat, long);
+            }
+        })  
+    })
+    
+    function initialize(newLat, newLong) {
+        var myCenter = new google.maps.LatLng(newLat, newLong)
+        var mapProp = {
+            center: myCenter,
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        var marker = new google.maps.Marker({
+            position: myCenter,
+        });
+        marker.setMap(map);
+    }  
+</script>
+</body>
+</html>
