@@ -1,4 +1,8 @@
 # GenesisGym
+
+Project for the course:
+  - HYPERMEDIA APPLICATIONS (WEB AND MULTIMEDIA)
+
 Authors:
   
   - Davide Luigi Greco
